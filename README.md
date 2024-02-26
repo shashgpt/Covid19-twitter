@@ -1,4 +1,4 @@
-# Covid19-twitter dataset for testing CDR-dissemination performance of Knowledge-transfer methods
+# Covid19-twitter dataset
 We constructed a dataset from tweets based on Covid-19 topic for sentence-level binary sentiment classification task. The dataset can be downloaded from this google-drive link: https://drive.google.com/file/d/1p3yZ-L8OxsZYuXOJoOn8aspYFLnn68b_/view?usp=share_link
 
 Below, we describe each column in the dataset
