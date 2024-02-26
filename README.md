@@ -1,5 +1,5 @@
 # Covid19-twitter dataset
-We constructed a dataset from tweets based on the COVID-19 topic for the sentence-level binary sentiment classification task. As per the Twitter Developer Terms (check the Content redistribution section on https://developer.twitter.com/en/developer-terms/agreement-and-policy), the actual tweets cannot be released, however, we are releasing the tweet IDs which can be used to hydrate and get actual tweets (more information on how to hydrate tweets can be found here: https://theneuralblog.com/hydrating-tweet-ids/). The dataset can be downloaded from the Zenodo platform: https://zenodo.org/records/10703620
+We constructed a dataset from tweets based on the COVID-19 topic for the sentence-level binary sentiment classification task. As per the Twitter Developer Terms (check the Content redistribution section on https://developer.twitter.com/en/developer-terms/agreement-and-policy), the actual tweets cannot be released, however, we are releasing the tweet IDs which can be used to hydrate and get actual tweets (more information on how to hydrate tweets can be found here: https://theneuralblog.com/hydrating-tweet-ids/). The dataset can be downloaded from the Zenodo platform: 10.5281/zenodo.10704300
 
 Below, we describe each column in the dataset
 | Columns        | Meaning      |
