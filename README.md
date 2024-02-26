@@ -1,6 +1,5 @@
 # Covid19-twitter dataset
-We constructed a dataset from tweets based on Covid-19 topic for sentence-level binary sentiment classification task. The dataset can be downloaded from this google-drive link: https://drive.google.com/file/d/1p3yZ-L8OxsZYuXOJoOn8aspYFLnn68b_/view?usp=share_link
-
+We constructed a dataset from tweets based on Covid-19 topic for the sentence-level binary sentiment classification task. As per the Twitter Developer Terms (check the Content redistribution section on https://developer.twitter.com/en/developer-terms/agreement-and-policy), the actual tweets cannot be released, however, we are releasing the tweet IDs which can be used to hydrate and get actual tweets. More information on how to hydrate tweets can be found here: https://theneuralblog.com/hydrating-tweet-ids/
 Below, we describe each column in the dataset
 | Columns        | Meaning      |
 | ------------- |:-------------:|
