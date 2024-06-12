@@ -31,7 +31,7 @@ Below, we describe each column in the dataset
    <img width="1686" alt="image" src="https://github.com/shashgpt/Covid19-twitter/assets/22150410/be8a93c1-f2a6-4669-bf19-31aca409478f">
 3) Install the dependencies listed in requirements.txt file, and run the check_reproducibility.ipynb Jupyter notebook. Please note that the notebook was tested on a RTX2080 ti GPU, Ubuntu 22.04.2 LTS operating system, and is written in Python 3.11.0rc1 language.
 4) Alternatively, you can download the following Docker image instead of maunally creating the runtime environment. Instructions on installing the GPU-enabled Docker can be found here: https://www.tensorflow.org/install/docker#examples_using_cpu-only_images
-   
-5) Build the Docker image using this command: sudo docker run --mount type=bind,source="$(pwd)",target=/tf --gpus all -it --network="host" --rm tensorflow/tensorflow:2.14.0-gpu-jupyter
+   docker pull sunbro/covid19_twitter:tensorflow_2.14.0-gpu-jupyter
+5) Build the Docker image using this command: sudo docker run --mount type=bind,source="$(pwd)",target=/tf --gpus all -it --network="host" --rm sunbro/covid19_twitter:tensorflow_2.14.0-gpu-jupyter
 6) Access the container as a Jupter server using the local browser.
 
