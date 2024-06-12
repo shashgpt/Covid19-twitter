@@ -21,3 +21,8 @@ Below, we describe each column in the dataset
 | vader_sentiment_clause_B | Sentiment polarity of the B conjunct in the tweet determined as per the VADER sentiment analysis tool |
 
 ## Steps to reproduce benchmark results in the paper
+1) Ensure that you have created a Twitter developer account at: https://developer.x.com/. You will need to upgrade your account to "Basic" tier in order to get access to the "GET /2/tweets" API-endpoint. Given the tweet IDs, this will let you get the actual tweets from Twitter platform (check https://developer.x.com/en/docs/api-reference-index).
+2) After creating the Twitter developer account, identify the following information related to your default project on the account portal: -
+3) <img width="1261" alt="image" src="https://github.com/shashgpt/Covid19-twitter/assets/22150410/8236dc4b-b03d-4aa4-9ccc-4694abef9143">
+
+   a) Access Key 
