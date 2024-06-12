@@ -37,8 +37,8 @@ class Word_vectors(object):
         assign each token in every sentence a unique int value (unique in the entire dataset)
         return a dictionary word_index[word] = unique int value
         """
-        # vectorize_layer = tf.keras.layers.TextVectorization(standardize=None, split='whitespace')
-        vectorize_layer = tf.keras.layers.experimental.preprocessing.TextVectorization(standardize=None, split='whitespace')
+        vectorize_layer = tf.keras.layers.TextVectorization(standardize=None, split='whitespace')
+        # vectorize_layer = tf.keras.layers.experimental.preprocessing.TextVectorization(standardize=None, split='whitespace')
         vectorize_layer.adapt(np.array(dataset["sentence"]))
         vocab = vectorize_layer.get_vocabulary()
         word_index = dict(zip(vocab, range(len(vocab))))
@@ -66,11 +66,5 @@ class Word_vectors(object):
                 misses += 1
         print("\nWord vectors created")
         print("\nConverted %d words (%d misses)" % (hits, misses))
-
-        with open("datasets/"+self.config["dataset_name"]+"/"+"/word_index.pickle", "wb") as handle:
-            pickle.dump(word_index, handle)
-        with open("datasets/"+self.config["dataset_name"]+"/"+"/word_vectors.npy", "wb") as handle:
-            np.save(handle, word_vectors)
-
+        
         return word_vectors, word_index
-

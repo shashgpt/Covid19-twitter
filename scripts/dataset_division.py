@@ -92,18 +92,4 @@ class Dataset_division(object):
         test_dataset = dataset.iloc[test_idx].reset_index(drop=True)
         val_datasets, test_datasets = self.divide_into_sections(val_dataset, test_dataset)
 
-        dataset = dataset.to_dict('list')
-        train_dataset = train_dataset.to_dict('list')
-        for key, value in val_datasets.items():
-            val_datasets[key] = val_datasets[key].to_dict('list')
-        for key, value in test_datasets.items():
-            test_datasets[key] = test_datasets[key].to_dict('list')
-        
-        with open("datasets/"+self.config["dataset_name"]+"/train_dataset.pickle", "wb") as handle:
-            pickle.dump(train_dataset, handle)
-        with open("datasets/"+self.config["dataset_name"]+"/val_dataset.pickle", "wb") as handle:
-            pickle.dump(val_datasets, handle)
-        with open("datasets/"+self.config["dataset_name"]+"/test_dataset.pickle", "wb") as handle:
-            pickle.dump(test_datasets, handle)
-
         return train_dataset, val_datasets, test_datasets
