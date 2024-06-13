@@ -33,7 +33,7 @@ Below, we describe each column in the dataset
 4) Alternatively, you can download the Docker image (https://hub.docker.com/r/sunbro/covid19_twitter/tags) instead of maunally creating the runtime environment. Instructions on installing and building a GPU-enabled Docker image can be found here: https://www.tensorflow.org/install/docker#examples_using_cpu-only_images
 
 ## Check the existing results in the paper
-If you would like to inspect the existing results and trained models in the paper, please download the file from this link: https://drive.google.com/file/d/1i6zXPoLFT5c_SRkLmRJG76dIENst6ZZ8/view?usp=sharing
+If you would like to inspect the existing results presented in the paper, please download the file from this link: https://drive.google.com/file/d/1i6zXPoLFT5c_SRkLmRJG76dIENst6ZZ8/view?usp=sharing
 
-and run the suitable code block in the notebook
+unzip it, and run the suitable code block in the notebook
 
