@@ -9,7 +9,9 @@ import traceback
 from tqdm import tqdm
 from transformers import TFRobertaModel, RobertaTokenizer, AutoConfig
 
-from scripts.training.additional_validation_sets import AdditionalValidationSets
+from scripts.additional_validation_sets import AdditionalValidationSets
+from scripts.corrects_distribution import Corrects_distribution
+from scripts.percy_score import calculate_percy
 
 MODEL = "cardiffnlp/twitter-roberta-base-sentiment-latest"
 
@@ -198,7 +200,12 @@ class train_roberta_transformer(object):
             self.model.load_weights("assets/trained_models/"+self.config["asset_name"]+".h5")
 
             #Results to be created after evaluation
-            results = test_datasets["test_dataset"].copy()
+            results = {'sentence':[], 
+                        'sentiment_label':[],  
+                        'rule_label':[],
+                        'contrast':[],
+                        'sentiment_probability_output':[], 
+                        'sentiment_prediction_output':[]}
 
             #Evaluation and predictions
             evaluations = self.model.evaluate(x=test_dataset[0], y=test_dataset[1])
@@ -207,8 +214,11 @@ class train_roberta_transformer(object):
             print(len(predictions))
 
             #Create results
-            results['sentiment_probability_output'] = []
-            results['sentiment_prediction_output'] = []
+            for index, sentence in enumerate(test_datasets["test_dataset"]["sentence"]):
+                results['sentence'].append(test_datasets["test_dataset"]['sentence'][index])
+                results['sentiment_label'].append(test_datasets["test_dataset"]['sentiment_label'][index])
+                results['rule_label'].append(test_datasets["test_dataset"]['rule_label'][index])
+                results['contrast'].append(test_datasets["test_dataset"]['contrast'][index])
             for prediction in predictions:
                 results['sentiment_probability_output'].append(prediction)
                 prediction = np.rint(prediction)
@@ -220,7 +230,24 @@ class train_roberta_transformer(object):
             with open("assets/results/"+self.config["asset_name"]+".pickle", 'wb') as handle:
                 pickle.dump(results, handle)
 
-        if self.config["generate_explanation"] == True:
+            #Check the rule-subset of the results: balancing between contrast and no-contrast tweets of rule-subset
+            results = pd.DataFrame(results)
+            one_rule = pd.concat([results.loc[(results["rule_label"]!=0)&(results["contrast"]==1)], results.loc[(results["rule_label"]!=0)&(results["contrast"]==0)]])
+            one_rule = one_rule.reset_index(drop=True)
+            one_rule_contrast_pos = one_rule.loc[(one_rule["contrast"]==1)&(one_rule["sentiment_label"]==1)]
+            one_rule_contrast_neg = one_rule.loc[(one_rule["contrast"]==1)&(one_rule["sentiment_label"]==0)]
+            one_rule_contrast_pos_sample = one_rule_contrast_pos.sample(n=1350, random_state=11)
+            one_rule_contrast_neg_sample = one_rule_contrast_neg.sample(n=1351, random_state=11)
+            one_rule.drop(one_rule_contrast_pos_sample.index, inplace = True)
+            one_rule.drop(one_rule_contrast_neg_sample.index, inplace = True)
+            results = pd.concat([results.loc[results["rule_label"]==0], one_rule])
+            results = results.reset_index(drop=True)
+            base_sent_corrects = Corrects_distribution(len(results['sentence'])).model_sentiment_correct_distributions(results)
+            accuracy = sum(base_sent_corrects["one_rule"])/len(base_sent_corrects["one_rule"])
+            print("\n")
+            print(round(accuracy, 3))
+
+        if self.config["generate_explanations"] == True:
             print("\nLIME explanations")
 
             #Load trained model
@@ -287,6 +314,31 @@ class train_roberta_transformer(object):
                 os.makedirs("assets/lime_explanations/")
             with open("assets/lime_explanations/"+self.config["asset_name"]+".pickle", "wb") as handle:
                 pickle.dump(explanations, handle)
+
+            #Check the rule-subset of the results: balancing between contrast and no-contrast tweets of rule-subset
+            if self.config["generate_explanation_for_one_instance"] == False:
+                results = pd.DataFrame(results)
+                one_rule = pd.concat([results.loc[(results["rule_label"]!=0)&(results["contrast"]==1)], 
+                                      results.loc[(results["rule_label"]!=0)&(results["contrast"]==0)]])
+                one_rule = one_rule.reset_index(drop=True)
+                one_rule_contrast_pos = one_rule.loc[(one_rule["contrast"]==1)&(one_rule["sentiment_label"]==1)]
+                one_rule_contrast_neg = one_rule.loc[(one_rule["contrast"]==1)&(one_rule["sentiment_label"]==0)]
+                one_rule_contrast_pos_sample = one_rule_contrast_pos.sample(n=1350, random_state=11)
+                one_rule_contrast_neg_sample = one_rule_contrast_neg.sample(n=1351, random_state=11)
+                one_rule.drop(one_rule_contrast_pos_sample.index, inplace = True)
+                one_rule.drop(one_rule_contrast_neg_sample.index, inplace = True)
+                results = pd.concat([results.loc[results["rule_label"]==0], one_rule])
+                results = results.reset_index(drop=True)
+                explanations = pd.DataFrame(explanations)
+                explanations.drop(one_rule_contrast_pos_sample.index, inplace = True)
+                explanations.drop(one_rule_contrast_neg_sample.index, inplace = True)
+                explanations = explanations.reset_index(drop=True)
+                one_rule_results = pd.concat([results.loc[(results["rule_label"]!=0)&(results["contrast"]==1)], 
+                                              results.loc[(results["rule_label"]!=0)&(results["contrast"]==0)]])
+                percy = calculate_percy(one_rule_results, explanations)
+                percy_value = sum(percy["one_rule"])/len(percy["one_rule"])
+                print("\n")
+                print("PERCY score: ", round(percy_value, 3))
         
         #save the configuration parameters for this run (marks the creation of an asset)
         if not os.path.exists("assets/configurations/"):

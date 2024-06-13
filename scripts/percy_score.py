@@ -24,7 +24,7 @@ def calculate_percy(results_one_rule, results_explanations, type_of_percy=None, 
     results_one_rule = pd.DataFrame(results_one_rule)
     results_explanations = pd.DataFrame(results_explanations)
     
-    sentences = list(results_one_rule['sentence'])
+    sentences = list(results_explanations['sentence'])
     sent_predictions = list(results_one_rule['sentiment_prediction_output'])
     sent_labels = list(results_one_rule['sentiment_label'])
     rule_labels = list(results_one_rule['rule_label'])
@@ -56,7 +56,7 @@ def calculate_percy(results_one_rule, results_explanations, type_of_percy=None, 
             continue
 
         # Check 2: If A&B conjuncts contains 1 token atleast
-        tokenized_sentence = sentence.split()
+        tokenized_sentence = sentence
         if rule_labels[index] == 1:
             rule_word = "but"
         elif rule_labels[index] == 2:

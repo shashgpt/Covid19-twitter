@@ -229,29 +229,30 @@ class train_rnn(object):
             with open("assets/lime_explanations/"+self.config["asset_name"]+".pickle", "wb") as handle:
                 pickle.dump(explanations, handle)
 
-            # #check the rule-subset of the results: balancing between contrast and no-contrast tweets of rule-subset
-            # results = pd.DataFrame(results)
-            # one_rule = pd.concat([results.loc[(results["rule_label"]!=0)&(results["contrast"]==1)], 
-            #                       results.loc[(results["rule_label"]!=0)&(results["contrast"]==0)]])
-            # one_rule = one_rule.reset_index(drop=True)
-            # one_rule_contrast_pos = one_rule.loc[(one_rule["contrast"]==1)&(one_rule["sentiment_label"]==1)]
-            # one_rule_contrast_neg = one_rule.loc[(one_rule["contrast"]==1)&(one_rule["sentiment_label"]==0)]
-            # one_rule_contrast_pos_sample = one_rule_contrast_pos.sample(n=1350, random_state=11)
-            # one_rule_contrast_neg_sample = one_rule_contrast_neg.sample(n=1351, random_state=11)
-            # one_rule.drop(one_rule_contrast_pos_sample.index, inplace = True)
-            # one_rule.drop(one_rule_contrast_neg_sample.index, inplace = True)
-            # results = pd.concat([results.loc[results["rule_label"]==0], one_rule])
-            # results = results.reset_index(drop=True)
-            # explanations = pd.DataFrame(explanations)
-            # explanations.drop(one_rule_contrast_pos_sample.index, inplace = True)
-            # explanations.drop(one_rule_contrast_neg_sample.index, inplace = True)
-            # explanations = explanations.reset_index(drop=True)
-            # one_rule_results = pd.concat([results.loc[(results["rule_label"]!=0)&(results["contrast"]==1)], 
-            #                               results.loc[(results["rule_label"]!=0)&(results["contrast"]==0)]])
-            # percy = calculate_percy(one_rule_results, explanations)
-            # percy_value = sum(percy["one_rule"])/len(percy["one_rule"])
-            # print("\n")
-            # print(round(percy_value, 3))
+            #check the rule-subset of the results: balancing between contrast and no-contrast tweets of rule-subset
+            if self.config["generate_explanation_for_one_instance"] == False:
+                results = pd.DataFrame(results)
+                one_rule = pd.concat([results.loc[(results["rule_label"]!=0)&(results["contrast"]==1)], 
+                                      results.loc[(results["rule_label"]!=0)&(results["contrast"]==0)]])
+                one_rule = one_rule.reset_index(drop=True)
+                one_rule_contrast_pos = one_rule.loc[(one_rule["contrast"]==1)&(one_rule["sentiment_label"]==1)]
+                one_rule_contrast_neg = one_rule.loc[(one_rule["contrast"]==1)&(one_rule["sentiment_label"]==0)]
+                one_rule_contrast_pos_sample = one_rule_contrast_pos.sample(n=1350, random_state=11)
+                one_rule_contrast_neg_sample = one_rule_contrast_neg.sample(n=1351, random_state=11)
+                one_rule.drop(one_rule_contrast_pos_sample.index, inplace = True)
+                one_rule.drop(one_rule_contrast_neg_sample.index, inplace = True)
+                results = pd.concat([results.loc[results["rule_label"]==0], one_rule])
+                results = results.reset_index(drop=True)
+                explanations = pd.DataFrame(explanations)
+                explanations.drop(one_rule_contrast_pos_sample.index, inplace = True)
+                explanations.drop(one_rule_contrast_neg_sample.index, inplace = True)
+                explanations = explanations.reset_index(drop=True)
+                one_rule_results = pd.concat([results.loc[(results["rule_label"]!=0)&(results["contrast"]==1)], 
+                                              results.loc[(results["rule_label"]!=0)&(results["contrast"]==0)]])
+                percy = calculate_percy(one_rule_results, explanations)
+                percy_value = sum(percy["one_rule"])/len(percy["one_rule"])
+                print("\n")
+                print("PERCY score: ", round(percy_value, 3))
         
         #save the configuration parameters (hyperparameters)
         if not os.path.exists("assets/configurations/"):
