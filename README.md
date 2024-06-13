@@ -35,5 +35,5 @@ Below, we describe each column in the dataset
 ## Check the existing results in the paper
 If you would like to inspect the existing results presented in the paper, please download the file from this link: https://drive.google.com/file/d/1i6zXPoLFT5c_SRkLmRJG76dIENst6ZZ8/view?usp=sharing
 
-unzip it, and run the suitable code block in the notebook
+unzip it, and run the last code block in the notebook
 
