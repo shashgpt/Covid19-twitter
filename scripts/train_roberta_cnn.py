@@ -239,7 +239,7 @@ class train_roberta_cnn(object):
             base_sent_corrects = Corrects_distribution(len(results['sentence'])).model_sentiment_correct_distributions(results)
             accuracy = sum(base_sent_corrects["one_rule"])/len(base_sent_corrects["one_rule"])
             print("\n")
-            print(round(accuracy, 3))
+            print("Sentiment accuracy: ", round(accuracy, 3))
 
         if self.config["generate_explanations"] == True:
             print("\nLIME explanations")
